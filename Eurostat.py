@@ -81,9 +81,9 @@ dataset = pyjstat.Dataset.read('https://ec.europa.eu/eurostat/api/dissemination/
 df = dataset.write('dataframe')
 df.replace(rename_dict, inplace=True)
 df_new = df.pivot(index='Geopolitical entity (reporting)', columns='Time', values='value')
-df_new['Change since 2002'] = df_new['2023'] - df_new['2002']
-df_new['Change since 2002 in %'] = (df_new['2023'] - df_new['2002'])/df_new['2002']*100
-df_new['Change since 2019'] = df_new['2023'] - df_new['2019']
-df_new['Change since 2019 in %'] = (df_new['2023'] - df_new['2019'])/(df_new['2019'])*100
-df_new = df_new[df_new['2023'].notna()]
+df_new['Change since 2003'] = df_new['2024'] - df_new['2003']
+df_new['Change since 2003 in %'] = (df_new['2024'] - df_new['2003'])/df_new['2003']*100
+df_new['Change since 2019'] = df_new['2024'] - df_new['2019']
+df_new['Change since 2019 in %'] = (df_new['2024'] - df_new['2019'])/(df_new['2019'])*100
+df_new = df_new[df_new['2024'].notna()]
 df_new.to_csv('data/Eurostat_Life_Expectancy_Country_Overall_Time.csv', index=True)
