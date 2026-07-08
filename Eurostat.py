@@ -81,9 +81,12 @@ dataset = pyjstat.Dataset.read('https://ec.europa.eu/eurostat/api/dissemination/
 df = dataset.write('dataframe')
 df.replace(rename_dict, inplace=True)
 df_new = df.pivot(index='Geopolitical entity (reporting)', columns='Time', values='value')
-df_new['Change since 2002'] = df_new['2024'] - df_new['2002']
-df_new['Change since 2002 in %'] = (df_new['2024'] - df_new['2002'])/df_new['2002']*100
-df_new['Change since 2019'] = df_new['2024'] - df_new['2019']
-df_new['Change since 2019 in %'] = (df_new['2024'] - df_new['2019'])/(df_new['2019'])*100
-df_new = df_new[df_new['2024'].notna()]
+year_cols = sorted([c for c in df_new.columns if str(c).isdigit()], key=int)
+latest_year, oldest_year = year_cols[-1], year_cols[0]
+recent_year = str(int(latest_year) - 5)
+df_new[f'Change since {oldest_year}'] = df_new[latest_year] - df_new[oldest_year]
+df_new[f'Change since {oldest_year} in %'] = (df_new[latest_year] - df_new[oldest_year])/df_new[oldest_year]*100
+df_new[f'Change since {recent_year}'] = df_new[latest_year] - df_new[recent_year]
+df_new[f'Change since {recent_year} in %'] = (df_new[latest_year] - df_new[recent_year])/(df_new[recent_year])*100
+df_new = df_new[df_new[latest_year].notna()]
 df_new.to_csv('data/Eurostat_Life_Expectancy_Country_Overall_Time.csv', index=True)
